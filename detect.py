@@ -63,3 +63,18 @@ def analysis(path, plain):
                 if credential in vuln_content.lower():
                     payload = ["", "Hardcoded Credential", []]
                     add_vuln_var(payload, plain, path, vuln_content, content, regex_var_detect)
+
+        
+        # High Entropy String
+        content_pure = content.replace(' ', '')
+        regex_var_detect = ".*?=\s?[\"|'].*?[\"|'].*?"
+        regex = re.compile(regex_var_detect , re.I)
+        matches = regex.findall(content_pure)
+        BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+        HEX_CHARS = "1234567890abcdefABCDEF"
+
+        for vuln_content in matches:
+            payload = ["", "High Entropy String", []]
+            if shannon_entropy(vuln_content, BASE64_CHARS) >= 4.1 or \
+                shannon_entropy(vuln_content, HEX_CHARS) >= 2.5:
+                add_vuln_var(payload, plain, path, vuln_content, content, regex_var_detect)
