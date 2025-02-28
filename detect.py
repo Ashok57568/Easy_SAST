@@ -160,3 +160,10 @@ def recursive(dir, progress, plain):
     except OSError as e:
         print("Error 404 - Not Found, maybe you need more right ?" + " " * 30)
         exit(-1)
+        def scanresults():
+    """
+    Prints a summary of the scan results, including the number of vulnerabilities found and the number of files analyzed.
+    """
+    global result_count
+    global result_files
+    print("Found {} vulnerabilities in {} files".format(result_count, result_files))
