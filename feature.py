@@ -21,3 +21,17 @@ def display(path, payload, vulnerability, line, declaration_text, declaration_li
     #Display the line and file path where the vulnerability was found.
     line = "-->{}{}{} in {}".format('' if plain else '\033[92m', line, '' if plain else '\033[0m', path)
 
+    # Highlight the vulnerable code snippet.
+    vuln = nth_replace("".join(vulnerability), colored, "{}".format('' if plain else '\033[92m') + colored + "{}".format('' if plain else '\033[0m'), occurrence)
+    vuln = "{}({})".format(payload[0], vuln)
+    # Print the vulnerability information.
+    # rows, columns = os.popen('stty size', 'r').read().split()
+    rows = 45
+    columns = 190
+    print("-" * (int(columns) - 1))
+    print("Name        \t{}".format(header))
+    print("-" * (int(columns) - 1))
+    print("{}Line {}             {}".format('' if plain else '\033[1m', '' if plain else '\033[0m', line))
+    print("{}Code {}             {}".format('' if plain else '\033[1m', '' if plain else '\033[0m', vuln))
+
+
