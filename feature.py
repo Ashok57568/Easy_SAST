@@ -10,8 +10,6 @@ def nth_replace(string, old, new, n):
         nth_split = [left_join.join(groups[:n]), right_join.join(groups[n:])]
         return new.join(nth_split)
     return string.replace(old, new)
-return new.join(nth_split)
-    return string.replace(old, new)
 
 
 def display(path, payload, vulnerability, line, declaration_text, declaration_line, colored, occurrence, plain):
@@ -24,6 +22,7 @@ def display(path, payload, vulnerability, line, declaration_text, declaration_li
     # Highlight the vulnerable code snippet.
     vuln = nth_replace("".join(vulnerability), colored, "{}".format('' if plain else '\033[92m') + colored + "{}".format('' if plain else '\033[0m'), occurrence)
     vuln = "{}({})".format(payload[0], vuln)
+
     # Print the vulnerability information.
     # rows, columns = os.popen('stty size', 'r').read().split()
     rows = 45
@@ -34,4 +33,10 @@ def display(path, payload, vulnerability, line, declaration_text, declaration_li
     print("{}Line {}             {}".format('' if plain else '\033[1m', '' if plain else '\033[0m', line))
     print("{}Code {}             {}".format('' if plain else '\033[1m', '' if plain else '\033[0m', vuln))
 
-
+    # Display information about the declaration of the vulnerable variable, if available.
+    if "$_" not in colored:
+        declared = "Undeclared in the file"
+        if declaration_text != "":
+            declared = "Line n°{}{}{} : {}".format('' if plain else '\033[0;92m', declaration_line, '' if plain else '\033[0m', declaration_text)
+        print("{}Declaration {}      {}".format('' if plain else '\033[1m', '' if plain else '\033[0m', declared))
+    print("")
