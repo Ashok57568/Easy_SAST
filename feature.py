@@ -40,3 +40,11 @@ def display(path, payload, vulnerability, line, declaration_text, declaration_li
             declared = "Line n°{}{}{} : {}".format('' if plain else '\033[0;92m', declaration_line, '' if plain else '\033[0m', declaration_text)
         print("{}Declaration {}      {}".format('' if plain else '\033[1m', '' if plain else '\033[0m', declared))
     print("")
+
+def find_line_vuln(payload, vulnerability, content):
+    """Find the line number of the vulnerability."""
+    content = content.split('\n')
+    for i in range(len(content)):
+        if payload[0] + '(' + vulnerability[0] + vulnerability[1] + vulnerability[2] + ')' in content[i]:
+            return str(i - 1)
+    return "-1"
