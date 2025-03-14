@@ -48,3 +48,11 @@ def find_line_vuln(payload, vulnerability, content):
         if payload[0] + '(' + vulnerability[0] + vulnerability[1] + vulnerability[2] + ')' in content[i]:
             return str(i - 1)
     return "-1"
+    
+def find_line_declaration(declaration, content):
+    """Find the line number where the variable is declared."""
+    content = content.split('\n')
+    for i in range(len(content)):
+        if declaration in content[i]:
+            return str(i)
+    return "-1"
