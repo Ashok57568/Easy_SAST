@@ -62,3 +62,10 @@ def clean_source_and_format(content):
     content = content.replace("    ", " ")  # Replace tabs with spaces.
     content = content.replace("echo ", "echo(").replace(";", ");")  # Normalize echo statements.
     return content
+
+def check_protection(payload, match):
+    """Check if a match contains protection."""
+    for protection in payload:
+        if protection in "".join(match):
+            return True
+    return False
