@@ -56,3 +56,9 @@ def find_line_declaration(declaration, content):
         if declaration in content[i]:
             return str(i)
     return "-1"
+
+def clean_source_and_format(content):
+    """Clean and format source code for analysis."""
+    content = content.replace("    ", " ")  # Replace tabs with spaces.
+    content = content.replace("echo ", "echo(").replace(";", ");")  # Normalize echo statements.
+    return content
