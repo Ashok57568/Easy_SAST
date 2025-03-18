@@ -48,7 +48,7 @@ def find_line_vuln(payload, vulnerability, content):
         if payload[0] + '(' + vulnerability[0] + vulnerability[1] + vulnerability[2] + ')' in content[i]:
             return str(i - 1)
     return "-1"
-    
+
 def find_line_declaration(declaration, content):
     """Find the line number where the variable is declared."""
     content = content.split('\n')
@@ -69,3 +69,45 @@ def check_protection(payload, match):
         if protection in "".join(match):
             return True
     return False
+
+def check_exception(match):
+    """Check if match is an exception."""
+    exceptions = ["_GET", "_REQUEST", "_POST", "_COOKIES", "_FILES"]
+    for exception in exceptions:
+        if exception in match:
+            return True
+    return False
+
+def check_declaration(content, vuln, path):
+    """Analyze and check variable declaration for vulnerabilities.
+    Process include statements and append their content for analysis."""
+    regex_declaration = re.compile("(include.*?|require.*?)\\([\"\'](.*?)[\"\']\\)")
+    includes = regex_declaration.findall(content)
+    for include in includes:
+        relative_include = os.path.dirname(path) + "/"
+        try:
+            path_include = relative_include + include[1]
+            with open(path_include, 'r') as f:
+                content = f.read() + content
+        except Exception as e:
+            return False, "", ""
+
+    # Look for declarations and reassess for vulnerabilities.
+    vulnerability = vuln[1:].replace(')', '\\)').replace('(', '\\(')
+    regex_declaration2 = re.compile("\\$(.*?)([\t ]*)as(?!=)([\t ]*)\\$" + vulnerability)
+    declaration2 = regex_declaration2.findall(content)
+    if len(declaration2) > 0:
+        return check_declaration(content, "$" + declaration2[0][0], path)
+
+    regex_declaration = re.compile("\\$" + vulnerability + "([\t ]*)=(?!=)(.*)")
+    declaration = regex_declaration.findall(content)
+    if len(declaration) > 0:
+        declaration_text = "$" + vulnerability + declaration[0][0] + "=" + declaration[0][1]
+        line_declaration = find_line_declaration(declaration_text, content)
+        regex_constant = re.compile("\\$" + vuln[1:] + "([\t ]*)=[\t ]*?([\"\'(]*?[a-zA-Z0-9{}_\\(\\)@\\.,!: ]*?[\"\')]*?);")
+        false_positive = regex_constant.match(declaration_text)
+        if false_positive:
+            return True, "", ""
+        return False, declaration_text, line_declaration
+
+    return False, "", ""
