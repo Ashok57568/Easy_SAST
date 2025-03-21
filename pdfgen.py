@@ -97,3 +97,31 @@ def create_pdf_report(input_file, output_file):
                         y_coordinate -= 15
 
                     last_block_was_code = False  # Reset flag
+
+                    # Add a separator line between entries
+                    pdf_canvas.line(72, y_coordinate, pdf_canvas._pagesize[0] - 72, y_coordinate)
+                    y_coordinate -= 15
+                    y_coordinate -= 15
+
+                elif line.startswith("-"):
+                    # Add a separator line between vulnerability entries
+                    if last_block_was_code:
+                        pdf_canvas.line(72, y_coordinate, pdf_canvas._pagesize[0] - 72, y_coordinate)
+                        y_coordinate -= 30  # Adjust the y-coordinate
+
+                # Check if there's a need to start a new page
+                if y_coordinate < 50:
+                    pdf_canvas.showPage()
+                    y_coordinate = pdf_canvas._pagesize[1] - 50
+
+    # Save the PDF
+    pdf_canvas.save()
+
+
+if __name__ == "__main__":
+        input_folder = "Report"
+        output_pdf_file = "output.pdf"
+
+        create_pdf_report(input_folder, output_pdf_file)
+
+        print(f"PDF report created successfully: {output_pdf_file}")
