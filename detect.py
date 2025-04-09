@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import os
 import re
 import math
@@ -14,8 +16,7 @@ def shannon_entropy(data, iterator):
     
     Parameters:
     - data: The string to calculate entropy for.
-    - iterator: A collection of unique characters to consider in the entropy calculation.
-    
+    - iterator: A collection of unique characters to consider in the entropy calculation.  
     Returns:
     - The Shannon entropy value as a float.
     """
@@ -160,10 +161,51 @@ def recursive(dir, progress, plain):
     except OSError as e:
         print("Error 404 - Not Found, maybe you need more right ?" + " " * 30)
         exit(-1)
-        def scanresults():
+
+def scanresults():
     """
     Prints a summary of the scan results, including the number of vulnerabilities found and the number of files analyzed.
     """
     global result_count
     global result_files
     print("Found {} vulnerabilities in {} files".format(result_count, result_files))
+
+
+
+def add_vuln_var(payload, plain, path, vuln_content, page_content, regex_var_detect, occurence=1):
+    """
+    Adds a found vulnerability to the results and displays it.
+    
+    Parameters:
+    - payload: The vulnerability details to add.
+    - plain: Indicates whether output should be plain text.
+    - path: The file path where the vulnerability was found.
+    - vuln_content: The specific content that was identified as vulnerable.
+    - page_content: The content of the entire page.
+    - regex_var_detect: The regex pattern used to detect the vulnerability.
+    - occurence: The occurrence count of the vulnerability (default is 1).
+    """
+    line_vuln = -1
+    splitted_content = page_content.split('\n')
+    for i in range(len(splitted_content)):
+        regex = re.compile(regex_var_detect, re.I)
+        matches = regex.findall(splitted_content[i])
+        if len(matches) > 0:
+            line_vuln = i
+
+
+    display(
+        path,           
+        payload,        
+        vuln_content,   
+        line_vuln,     
+        vuln_content,  
+        str(line_vuln), 
+        vuln_content,   
+        occurence,      
+        plain          
+    )
+
+    # increment the global vulnerability count
+    global result_count
+    result_count = result_count + 1
