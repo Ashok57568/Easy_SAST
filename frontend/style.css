@@ -1,0 +1,248 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  body {
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  .container {
+    display: flex;
+    height: 100vh;
+  }
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background-color: #222;
+    color: #fff;
+    padding: 20px;
+  }
+  .sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #00b4b4;
+  }
+  .sidebar ul {
+    list-style: none;
+  }
+  .sidebar ul li {
+    margin: 15px 0;
+  }
+  .sidebar ul li a {
+    color: #ccc;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+  }
+  .sidebar ul li a:hover {
+    color: #fff;
+  }
+  .sidebar ul li a svg {
+    margin-right: 10px;
+  }
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+  }
+  .upload-section {
+    text-align: center;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+  .upload-section h1 {
+    margin-bottom: 20px;
+    color: #008080;
+  }
+  .upload-section p {
+    margin-bottom: 25px;
+    color: #666;
+  }
+  .file-upload-area {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border 0.3s, background-color 0.3s;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .file-upload-area:hover {
+    border-color: #008080;
+    background-color: rgba(0, 128, 128, 0.05);
+  }
+  .file-upload-area.active {
+    border-color: #008080;
+    background-color: rgba(0, 128, 128, 0.1);
+  }
+  .file-upload-icon {
+    font-size: 48px;
+    color: #008080;
+    margin-bottom: 15px;
+  }
+  .file-upload-text {
+    margin-bottom: 10px;
+  }
+  .file-name {
+    font-weight: bold;
+    color: #008080;
+    display: none;
+    margin-top: 10px;
+  }
+  #fileInput {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  button#analyzeBtn {
+    padding: 12px 30px;
+    background-color: #008080;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: inline-block;
+  }
+  button#analyzeBtn:hover {
+    background-color: #006666;
+  }
+  button#analyzeBtn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  /* Results */
+  .results-section {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  .results-section h2 {
+    color: #008080;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .download-btn {
+    background-color: #008080;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    display: none;
+    transition: background-color 0.3s;
+  }
+  .download-btn:hover {
+    background-color: #006666;
+  }
+  .results-box {
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    min-height: 150px;
+    border: 1px solid #eee;
+  }
+  .results-placeholder {
+    text-align: center;
+    color: #999;
+    padding: 30px 0;
+  }
+  .vulnerability {
+    border-left: 4px solid #ff6b6b;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    border-radius: 0 5px 5px 0;
+  }
+  .vulnerability h3 {
+    color: #d32f2f;
+    margin-bottom: 5px;
+  }
+  .vulnerability-info {
+    display: flex;
+    margin-bottom: 8px;
+  }
+  .vulnerability-info span {
+    margin-right: 20px;
+    font-size: 14px;
+    color: #666;
+  }
+  .vulnerability-code {
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 14px;
+    overflow-x: auto;
+    margin-top: 10px;
+  }
+  .severity-high {
+    border-left-color: #d32f2f;
+  }
+  .severity-medium {
+    border-left-color: #ff9800;
+  }
+  .severity-low {
+    border-left-color: #ffcc00;
+  }
+  /* Loading spinner */
+  .spinner-container {
+    display: none;
+    text-align: center;
+    padding: 40px 0;
+  }
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 128, 128, 0.2);
+    border-radius: 50%;
+    border-top-color: #008080;
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto 20px;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, opacity 0.3s;
+    transform: translateY(-100px);
+    opacity: 0;
+    z-index: 1000;
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .toast.error {
+    background-color: #d32f2f;
+  }
+  .toast.success {
+    background-color: #4caf50;
+  }

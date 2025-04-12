@@ -1,0 +1,65 @@
+Name: Hardcoded Credential
+File: uploads\1744345881_configuration.php
+Line: 1
+Code: define("PASSWORD","pwd123*")
+--------------------------------------------
+Name: Hardcoded Credential
+File: uploads\1744345881_configuration.php
+Line: 1
+Code: $DB_PASS="password"
+--------------------------------------------
+Name: Hardcoded Credential
+File: uploads\1744345881_configuration.php
+Line: 1
+Code: $secret_flag="a2'&vkzg%"
+--------------------------------------------
+Name: Hardcoded Credential
+File: uploads\1744345881_configuration.php
+Line: 1
+Code: $token="1213144142353962062"
+--------------------------------------------
+Name: Hardcoded Credential
+File: uploads\1744345881_configuration.php
+Line: 1
+Code: $pwd="mysuper_cr3dz"
+--------------------------------------------
+Name: Hardcoded Credential
+File: uploads\1744345881_configuration.php
+Line: 1
+Code: $Pass="case!nsenSitiveP@ss"
+--------------------------------------------
+Name: High Entropy String
+File: uploads\1744345881_configuration.php
+Line: 4
+Code: $base64="TXlTdXBlclBhc3N3b3JkT3IganVzdCBhbm90aGVyIGJhY2tkb29yIGluIHlvdXIgY29kZSB5b3Ugd2FudCB0byBiZSBkZXRlY3RlZAo="
+--------------------------------------------
+Name: High Entropy String
+File: uploads\1744345881_configuration.php
+Line: 4
+Code: $hex="4d79537570657250617373776f72644f72206a75737420616e6f74686572206261636b646f6f7220696e20796f757220636f646520796f752077616e7420746f2062652064657465637465640a"
+--------------------------------------------
+Name: High Entropy String
+File: uploads\1744345881_configuration.php
+Line: 4
+Code: $fakeAPI1="AIzad8e8fca2dc0f896fd7cb4cb0031ba249123"
+--------------------------------------------
+Name: High Entropy String
+File: uploads\1744345881_configuration.php
+Line: 4
+Code: $fakeAPI2="AKIAD8E8FCA2DC0F896F"
+--------------------------------------------
+Name: High Entropy String
+File: uploads\1744345881_configuration.php
+Line: 4
+Code: $hash2="$1$VnG/6ABB$t6w9bQFxvI9tf0sFJf2TR."
+--------------------------------------------
+Name: High Entropy String
+File: uploads\1744345881_configuration.php
+Line: 4
+Code: $hash3="d8e8fca2dc0f896fd7cb4cb0031ba249"
+--------------------------------------------
+Name: High Entropy String
+File: uploads\1744345881_configuration.php
+Line: 4
+Code: if($pass=="$6$q8C1F6tv$zTP/eEVixqyQBEfsSbTidUJfnaE2ojNIpTwTHava/UhFORv3V4ehyTOGdQEoFo1dEVG6UcXwhG.UHvyQyERz01"
+--------------------------------------------

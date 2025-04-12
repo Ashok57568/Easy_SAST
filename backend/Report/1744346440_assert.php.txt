@@ -1,0 +1,10 @@
+Name: Remote Command Execution
+File: uploads\1744346440_assert.php
+Line: 2
+Code: "strpos('templates/'" . $page . "'.php', '..'
+--------------------------------------------
+Name: Remote Command Execution
+File: uploads\1744346440_assert.php
+Line: 2
+Code: "file_exists('templates/'". $page . "'.php'
+--------------------------------------------

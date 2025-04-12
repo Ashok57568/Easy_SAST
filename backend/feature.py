@@ -3,6 +3,17 @@
 import os
 import re
 
+# Define a color scheme for different severity levels.
+# Feel free to adjust these values or add more keys as needed.
+COLORS = {
+    "Critical": "\033[91m",  # Bright Red
+    "High": "\033[93m",      # Bright Yellow
+    "Medium": "\033[94m",    # Bright Blue
+    "Low": "\033[92m",       # Bright Green
+    "Reset": "\033[0m",
+    "Bold": "\033[1m"
+}
+
 def nth_replace(string, old, new, n):
     """Replace the nth occurrence of old in string with new."""
     if string.count(old) >= n:
@@ -13,34 +24,58 @@ def nth_replace(string, old, new, n):
         return new.join(nth_split)
     return string.replace(old, new)
 
-
-def display(path, payload, vulnerability, line, declaration_text, declaration_line, colored, occurrence, plain):
-    # Display detected vulnerability information.
-    header = "{}Potential vulnerability found : {}{}{}".format('' if plain else '\033[1m', '' if plain else '\033[92m', payload[1], '' if plain else '\033[0m')
-
-    #Display the line and file path where the vulnerability was found.
-    line = "-->{}{}{} in {}".format('' if plain else '\033[92m', line, '' if plain else '\033[0m', path)
-
+def display(path, payload, vulnerability, line, declaration_text, declaration_line, colored, occurrence, plain, severity="Medium"):
+    """
+    Display detected vulnerability information with enhanced colored output.
+    
+    Parameters:
+    - path: file path where vulnerability was found.
+    - payload: list with vulnerability details (e.g. [function, vulnerability_type, protection_functions])
+    - vulnerability: the matched vulnerability snippet.
+    - line: line number where vulnerability was detected.
+    - declaration_text: text of the variable declaration.
+    - declaration_line: line number of the declaration.
+    - colored: the vulnerable variable/code (used for highlighting).
+    - occurrence: occurrence number of the vulnerability.
+    - plain: if True, output is plain text (no colors).
+    - severity: severity level ("Critical", "High", "Medium", "Low").
+    """
+    # Choose color codes if plain is not set.
+    if not plain:
+        severity_color = COLORS.get(severity, COLORS["Medium"])
+        bold = COLORS["Bold"]
+        reset = COLORS["Reset"]
+    else:
+        severity_color = ""
+        bold = ""
+        reset = ""
+    
+    # Header with severity color
+    header = f"{bold}{severity_color}Potential vulnerability found: {payload[1]}{reset}" if not plain else f"Potential vulnerability found: {payload[1]}"
+    
+    # Display the line and file path where the vulnerability was found.
+    line_str = f"-->{bold}{COLORS['Low'] if not plain else ''}{line}{reset} in {path}" if not plain else f"-->{line} in {path}"
+    
     # Highlight the vulnerable code snippet.
-    vuln = nth_replace("".join(vulnerability), colored, "{}".format('' if plain else '\033[92m') + colored + "{}".format('' if plain else '\033[0m'), occurrence)
-    vuln = "{}({})".format(payload[0], vuln)
-
+    # Here we wrap the vulnerable code with the severity color.
+    vuln_highlight = nth_replace("".join(vulnerability), colored, f"{severity_color}{colored}{reset}" if not plain else colored, occurrence)
+    vuln_formatted = f"{payload[0]}({vuln_highlight})"
+    
     # Print the vulnerability information.
-    # rows, columns = os.popen('stty size', 'r').read().split()
     rows = 45
     columns = 190
     print("-" * (int(columns) - 1))
     print("Name        \t{}".format(header))
     print("-" * (int(columns) - 1))
-    print("{}Line {}             {}".format('' if plain else '\033[1m', '' if plain else '\033[0m', line))
-    print("{}Code {}             {}".format('' if plain else '\033[1m', '' if plain else '\033[0m', vuln))
-
-    # Display information about the declaration of the vulnerable variable, if available.
+    print(f"{bold}Line {reset}             {line_str}")
+    print(f"{bold}Code {reset}             {vuln_formatted}")
+    
+    # Display declaration info if available.
     if "$_" not in colored:
         declared = "Undeclared in the file"
         if declaration_text != "":
-            declared = "Line n°{}{}{} : {}".format('' if plain else '\033[0;92m', declaration_line, '' if plain else '\033[0m', declaration_text)
-        print("{}Declaration {}      {}".format('' if plain else '\033[1m', '' if plain else '\033[0m', declared))
+            declared = f"Line n°{bold}{COLORS['Low'] if not plain else ''}{declaration_line}{reset} : {declaration_text}"
+        print(f"{bold}Declaration {reset}      {declared}")
     print("")
 
 def find_line_vuln(payload, vulnerability, content):
@@ -93,14 +128,14 @@ def check_declaration(content, vuln, path):
                 content = f.read() + content
         except Exception as e:
             return False, "", ""
-
+    
     # Look for declarations and reassess for vulnerabilities.
     vulnerability = vuln[1:].replace(')', '\\)').replace('(', '\\(')
     regex_declaration2 = re.compile("\\$(.*?)([\t ]*)as(?!=)([\t ]*)\\$" + vulnerability)
     declaration2 = regex_declaration2.findall(content)
     if len(declaration2) > 0:
         return check_declaration(content, "$" + declaration2[0][0], path)
-
+    
     regex_declaration = re.compile("\\$" + vulnerability + "([\t ]*)=(?!=)(.*)")
     declaration = regex_declaration.findall(content)
     if len(declaration) > 0:
@@ -111,5 +146,5 @@ def check_declaration(content, vuln, path):
         if false_positive:
             return True, "", ""
         return False, declaration_text, line_declaration
-
+    
     return False, "", ""
